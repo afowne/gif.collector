@@ -10,18 +10,18 @@ import pic_log
 global_fp =None
 
 def handle_pic(pic_path,pic_title,source_URL):
-    #将gif的每帧Image构建一个数组
-    lst_phash=[]
     lst_frame = pic_split.ImageSpliter(pic_path)
-    for frame in lst_frame:
-        lst_phash.append(imagehash.phash(frame))
     #帧数只有1
-    if len(lst_frame) == 1:
+    if len(lst_frame) == 1 or len(lst_frame) == 0:
         os.remove(pic_path)
         pic_log.log_print("非动态图： %s||%s" % (pic_title,source_URL))
         return 2
 
     try:
+        #将gif的每帧Image构建一个数组
+        lst_phash=[]
+        for frame in lst_frame:
+            lst_phash.append(imagehash.phash(frame))
         #去除第一帧
         lst_phash.pop(0)
         #保存第二帧作为标准帧

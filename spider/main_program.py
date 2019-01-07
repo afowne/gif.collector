@@ -6,14 +6,17 @@
 import pic_extracter
 import pic_downloader
 
-target = 't3337320'
-target_path = 'spider\\'
+target = '3347321'
+target_path = 'data\\3\\'
 gif_save_path = 'F:\\gif\\'
 
-target_tuple= pic_extracter.extract(target,target_path)
+
+# dlp = pic_downloader.PicDownloader(Gif_Save_Path=gif_save_path)
+# dlp.download_pic_from_local('C:\\Users\\afowne\\Desktop\\21251130.gif','DMS-018')
+
+target_tuple= pic_extracter.extract3(target,target_path)
 lst_fanhao = target_tuple[0]
 lst_gif=target_tuple[1]
-
 
 dlp = pic_downloader.PicDownloader(Gif_Save_Path=gif_save_path)
 for i in range(0, len(lst_fanhao)):

@@ -46,7 +46,8 @@ class PicDownloader:
                 ret = pic_hash.handle_pic(self._filepath,d_title,d_url)
                 #pic_log.log_print("download_pic_by_request成功： %s (%s)" % (self._filepath,d_title))
         except Exception as e:
-            pic_log.log_print("download_pic_by_request出错： %s (d_url[%s],d_title[%s])" % (str(e),d_url,d_title))
+            #pic_log.log_print("download_pic_by_request出错： %s (d_url[%s],d_title[%s])" % (str(e),d_url,d_title))
+            pass
         finally:
             return ret
 
@@ -90,6 +91,15 @@ class PicDownloader:
         finally:
             driver.close()
             return ret
+
+    def download_pic_from_local(self,d_url,d_title):
+        try:
+            self._generate_file_name()
+            shutil.move(d_url,self._filepath)
+            pic_hash.handle_pic(self._filepath,d_title,'local')
+        except Exception as e:
+            pass
+
 
     def _generate_file_name(self):
         self._filename = str(int(round(time.time() * 1000)))+".gif"
