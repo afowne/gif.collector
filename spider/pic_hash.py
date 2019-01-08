@@ -7,8 +7,6 @@ import math
 import os
 import pic_log
 
-global_fp =None
-
 def handle_pic(pic_path,pic_title,source_URL):
     lst_frame = pic_split.ImageSpliter(pic_path)
     #帧数只有1
@@ -28,8 +26,6 @@ def handle_pic(pic_path,pic_title,source_URL):
         phash_standard = lst_phash[0]
         #去除重复帧
         lst_phash = list(set(lst_phash))
-        #去除标准帧
-        lst_phash.remove(phash_standard)
         if(len(lst_phash)>0):
             #计算汉明距离并存入字典，其中hash为key，距离为value
             dict_phash = {}
@@ -78,6 +74,64 @@ def handle_pic(pic_path,pic_title,source_URL):
         add_fingerprint(i,gif_ID,bin(int(str(i),16))[2:])
     return 0
 
+def search_pic_by_path(pic_path):
+    lst_frame = pic_split.ImageSpliter(pic_path)
+    #帧数只有1
+    if len(lst_frame) == 1 or len(lst_frame) == 0:
+        os.remove(pic_path)
+        pic_log.log_print("非动态图： %s||%s" % ('',''))
+        return 2
+
+    try:
+        #将gif的每帧Image构建一个数组
+        lst_phash=[]
+        for frame in lst_frame:
+            lst_phash.append(imagehash.phash(frame))
+        #去除第一帧
+        lst_phash.pop(0)
+        #保存第二帧作为标准帧
+        phash_standard = lst_phash[0]
+        #去除重复帧
+        lst_phash = list(set(lst_phash))
+        if(len(lst_phash)>0):
+            #计算汉明距离并存入字典，其中hash为key，距离为value
+            dict_phash = {}
+            for i in range(0,len(lst_phash)):
+                dict_phash[lst_phash[i]] = lst_phash[i]-phash_standard
+            #按照value从大到小排序
+            dict_phash= sorted(dict_phash.items(), key=lambda d:d[1], reverse = True)
+            #待优化
+            #取三个fp作为样本，第一个，和第一个相差最大的，和处于中间的
+            goto_insert_phash =[]
+            goto_insert_phash.append(phash_standard)
+            goto_insert_phash.append(dict_phash[0][0])
+            goto_insert_phash.append(dict_phash[(math.floor(len(dict_phash)/2))][0])
+            goto_insert_phash = list(set(goto_insert_phash))
+    except Exception as e:
+        return 6
+    
+    #待优化
+    #寻找样本fp有没有相同的
+    gif_ID = None
+    for i in goto_insert_phash:
+        gif_ID=find_fingerprint_by_fp(str(i))
+        if gif_ID!=None:
+            break
+    #有相同的删除下载文件并结束本次录入
+    if gif_ID != None:
+        os.remove(pic_path)
+        pic_log.log_print("重复样本： %s||%s" % ('',''))
+        return 2
+    #提取番号并记录
+    _banngou = banngou.filter_it(pic_title)
+    if _banngou == "":
+        pic_log.log_print("空白标题： %s||%s" % ('',''))
+        return 3
+    banngou_ID = banngou.find_banngou_id(_banngou)
+    if banngou_ID == None:
+        pic_log.log_print("番号获取失败： %s||%s" % ('',''))
+        return 4
+    return 0
 
 def add_gif_detail(gif_URL,banngou_ID,source_title,source_URL):
     ret = None
@@ -141,7 +195,7 @@ def load_all_fp():
     return data
 
 
-#search_pic_by_path('F:\\gif\\1546651488892.gif')
+#search_pic_by_path('E:\\gif\\1546871949016.gif')
 
 #handle_pic('F:\gif\qq.gif','ssss')
 

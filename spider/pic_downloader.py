@@ -20,13 +20,13 @@ header = {
     'Connection': 'Keep-Alive',
     'Pragma': 'no-cache'
 }
-se_source_path ='C:\\Users\\afowne\\Downloads\\'
 
 class PicDownloader:
     _gif_save_path = ""
+    _se_source_path = ""
     _filename = ""
     _filepath = ""
-    def __init__(self,Gif_Save_Path):
+    def __init__(self,Gif_Save_Path,Se_source_path):
         self._gif_save_path=Gif_Save_Path    
 
     def download_pic_by_request(self,d_url, d_title):
@@ -78,11 +78,11 @@ class PicDownloader:
             pyautogui.typewrite(['enter'])
             time.sleep(1)
 
-            if(not self._check_file_size(os.path.getsize(se_source_path+self._filename))):
-                os.remove(se_source_path+self._filename)
+            if(not self._check_file_size(os.path.getsize(_se_source_path+self._filename))):
+                os.remove(_se_source_path+self._filename)
                 ret = 2
             else:
-                shutil.move(se_source_path+self._filename,self._filepath)
+                shutil.move(_se_source_path+self._filename,self._filepath)
 
                 ret = pic_hash.handle_pic(self._filepath,d_title,d_url)
                 #pic_log.log_print("download_pic_by_se成功： %s (%s)" % (self._filepath,d_title))
