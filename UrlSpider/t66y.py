@@ -15,25 +15,26 @@ def filefind(ftype,title,url):
         return 1
 
 
-for m in range(1,101):
-    url='https://t66y.com/thread0806.php?fid=7&search=&page='+str(m)
-    header = {
-    'User-Agent': 'Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.3029.96 Safari/537.36'
-    }
-    request = urllib.request.Request(url, headers=header)
-    reponse = urllib.request.urlopen(request).read()
-    doc = PyQuery(reponse)
+try 
+    for m in range(1,101):
+        url='https://t66y.com/thread0806.php?fid=7&search=&page='+str(m)
+        header = {
+        'User-Agent': 'Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.3029.96 Safari/537.36'
+        }
+        request = urllib.request.Request(url, headers=header)
+        reponse = urllib.request.urlopen(request).read()
+        doc = PyQuery(reponse)
 
-    for i in range(3,103):
-        selector ='#ajaxtable > tbody:nth-child(2) > tr:nth-child('+str(i)+') > td.tal > h3 > a'
-        p = doc(selector)
-        if p.length == 0:
-            continue
-        ptext =str(p.text()).lower()
+        for i in range(3,103):
+            selector ='#ajaxtable > tbody:nth-child(2) > tr:nth-child('+str(i)+') > td.tal > h3 > a'
+            p = doc(selector)
+            if p.length == 0:
+                continue
+            ptext =str(p.text()).lower()
 
-        if ptext.find("gif") >-1:
-            filefind('gif',str(p.text()),str(p.attr.href))
-        elif ptext.find("动图") >-1:
-            filefind('动图',str(p.text()),str(p.attr.href))
-
-
+            if ptext.find("gif") >-1:
+                filefind('gif',str(p.text()),str(p.attr.href))
+            elif ptext.find("动图") >-1:
+                filefind('动图',str(p.text()),str(p.attr.href))
+except Exception as e:
+    print(str(e))
