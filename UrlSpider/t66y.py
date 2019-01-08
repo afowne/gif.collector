@@ -7,9 +7,12 @@ def filefind(ftype,title,url):
     f=open('log\\t66y_'+ftype+'.txt', 'r', encoding='UTF-8')
     text = f.read()
     f.close()
+    if url.find("3320542")>0 or url.find("3345742")>0 or url.find("3347321")>0 or url.find("3344256")>0 or url.find("3317327")>0 or url.find("3321440")>0:
+        return 0
     if text.find(url) ==-1:
         with open('log\\t66y_'+ftype+'.txt','a', encoding='UTF-8') as ff:
             ff.write(title+"  ----------  https://t66y.com/"+ url+"\n")
+        return 1
 
 
 for m in range(1,101):
