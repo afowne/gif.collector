@@ -1,6 +1,7 @@
 import urllib
-import requests
 from pyquery import PyQuery
+import time
+import random
 
 
 def filefind(ftype,title,url):
@@ -15,11 +16,12 @@ def filefind(ftype,title,url):
         return 1
 
 
-try 
-    for m in range(1,101):
+try:
+    for m in range(61,101):
+        print(str(m))
         url='https://t66y.com/thread0806.php?fid=7&search=&page='+str(m)
         header = {
-        'User-Agent': 'Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.3029.96 Safari/537.36'
+        'User-Agent': 'Mozilla/5.0 (Macintosh; U; Intel Mac OS X 10_6_8; en-us) AppleWebKit/534.50 (KHTML, like Gecko) Version/5.1 Safari/534.50'
         }
         request = urllib.request.Request(url, headers=header)
         reponse = urllib.request.urlopen(request).read()
@@ -36,5 +38,6 @@ try
                 filefind('gif',str(p.text()),str(p.attr.href))
             elif ptext.find("动图") >-1:
                 filefind('动图',str(p.text()),str(p.attr.href))
+        time.sleep(int(random.uniform(305,325)))
 except Exception as e:
     print(str(e))
