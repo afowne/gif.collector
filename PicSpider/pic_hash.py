@@ -59,6 +59,7 @@ def handle_pic(pic_path,pic_title,source_URL):
     #提取番号并记录
     _banngou = banngou.filter_it(pic_title)
     if _banngou == "":
+        os.remove(pic_path)
         pic_log.log_print("空白标题： %s||%s" % (pic_title,source_URL))
         return 3
     banngou_ID = banngou.find_banngou_id(_banngou)
@@ -120,7 +121,6 @@ def search_pic_by_path(pic_path):
     #有相同的删除下载文件并结束本次录入
     if gif_ID != None:
         os.remove(pic_path)
-        pic_log.log_print("重复样本： %s||%s" % ('',''))
         return 2
     #提取番号并记录
     _banngou = banngou.filter_it(pic_title)
