@@ -29,15 +29,18 @@ def extract2(target,target_path):
 
     lst_fanhao = []
     lst_gif = []
+    last_fanhao = ""
     for i in doc.children():
         if(len(lst_fanhao) == len(lst_gif)):
             if i.tag == "br":
                 if i.tail != None and i.tail != '\n':
                     lst_fanhao.append(i.tail)
+                    last_fanhao = i.tail
                     continue
-        if(len(lst_fanhao) > len(lst_gif)):
-            if i.tag == "img":
-                lst_gif.append(i.attrib["src"])
+        if i.tag == "img":  
+            if(len(lst_fanhao) == len(lst_gif)):
+                lst_fanhao.append(last_fanhao)
+            lst_gif.append(i.attrib["src"])
     return (lst_fanhao,lst_gif)
 
 #先图片再番号
